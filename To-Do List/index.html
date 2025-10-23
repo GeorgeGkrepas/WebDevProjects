@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="todo-app">
+            <h2>To-Do List<img src="images/list-icon.png"></h2>
+            <div class="row">
+                <input type="text" id="input-box" placeholder="Type a task">
+                <button onclick="addTask()">Add</button>
+            </div>
+            <hr>
+            <ul id="list-container">
+                <!-- Uncompleted tasks will appear here -->
+            </ul>  
+        </div>
+        <div class="completed-tasks">
+            <h3>Completed Tasks</h3>
+            <ul id="completed-list">
+                <!-- Completed tasks will appear here -->
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>
