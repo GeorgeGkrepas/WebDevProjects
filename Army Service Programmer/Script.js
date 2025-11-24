@@ -33,7 +33,9 @@ const monthNames = [
         // Add days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement("li");
-            dayCell.textContent = day;
+            const dayButton = document.createElement("button");
+            dayButton.textContent = day;
+            dayCell.appendChild(dayButton);
             daysSection.appendChild(dayCell);
         }
         

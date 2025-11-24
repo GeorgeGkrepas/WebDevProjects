@@ -14,7 +14,8 @@ h1{
 }
 
 .nav ul {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto auto;
     gap: 10px;
     padding: 0;
     list-style: none;
@@ -46,4 +47,25 @@ h1{
     list-style: none;
     text-align: center;
     row-gap: 50px;
+}
+
+.days li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.days button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: large;
+    justify-content: center;
+    background-color: azure;
+    border: none;
+    cursor: pointer;
+}
+
+.days button:hover {
+    background-color: gray;
 }
