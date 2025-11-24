@@ -3,6 +3,10 @@
     font-size: large;
 }
 
+h1{
+    text-align: center;
+}
+
 .nav {
     display: flex;
     justify-content: center;
@@ -19,6 +23,7 @@
 .calendar {
     width: 100%;
     outline: 3px solid black;
+    background-color: cadetblue;
 }
 
 .weekdays {
@@ -40,4 +45,5 @@
     background-color: azure;
     list-style: none;
     text-align: center;
+    row-gap: 50px;
 }
