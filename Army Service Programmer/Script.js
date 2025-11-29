@@ -4,11 +4,12 @@ const monthNames = [
 ];
 
 const dayNames = [
-    "ΔΕΥΤΕΡΑ", "ΤΡΙΤΗ", "ΤΕΤΑΡΤΗ", "ΠΕΜΠΤΗ", "ΠΑΡΑΣΚΕΥΗ", "ΣΑΒΒΑΤΟ", "ΚΥΡΙΑΚΗ"
+    "ΚΥΡΙΑΚΗ", "ΔΕΥΤΕΡΑ", "ΤΡΙΤΗ", "ΤΕΤΑΡΤΗ", "ΠΕΜΠΤΗ", "ΠΑΡΑΣΚΕΥΗ", "ΣΑΒΒΑΤΟ"
 ];
 
 // Start with current date
 let date = new Date();
+let selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 function renderCalendar() {
     const year = date.getFullYear();
@@ -38,6 +39,21 @@ function renderCalendar() {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement("li");
         const dayButton = document.createElement("button");
+        dayButton.addEventListener("click", () => {
+            selectedDate.setDate(day);
+            selectedDate.setMonth(month);
+            selectedDate.setFullYear(year);
+            // Remove 'selected' class from other buttons
+            const buttons = daysSection.getElementsByTagName("button");
+            for (let btn of buttons) {
+                if (btn !== dayButton) {
+                    btn.classList.remove("selected");
+                }
+            }
+            dayButton.classList.add("selected");
+            renderDayDetails();
+        });
+
         dayButton.textContent = day;
         dayCell.appendChild(dayButton);
         daysSection.appendChild(dayCell);
@@ -54,17 +70,36 @@ function renderCalendar() {
         li.style.opacity = "0.3";
         daysSection.appendChild(li);
     }
+
+    // Highlight current day if in current month and year
+    const buttons = daysSection.getElementsByTagName("button");
+    if (selectedDate.getMonth() === date.getMonth() && selectedDate.getFullYear() === date.getFullYear()) {
+        for (let btn of buttons) {
+            if (parseInt(btn.textContent) === selectedDate.getDate()) {
+                btn.classList.add("selected");
+                break;
+            }
+        }
+    }
+
+    // Select current day on load
+    window.onload = () => {
+        const buttons = daysSection.getElementsByTagName("button");
+        for (let btn of buttons) {
+            if (parseInt(btn.textContent) === date.getDate()) {
+                btn.classList.add("selected");
+                break;
+            }
+    }
+}
     
 }
 
 function renderDayDetails() {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-
     // Update header (day and date)
     const header = document.getElementById("day&date");
-    header.innerHTML = `<span style="font-weight:bold">${dayNames[date.getDay() - 1]}<br>
-        ${"ΚΑΤΑΣΤΑΣΗ ΥΠΗΡΕΣΙΩΝ ΛΣ/ΔΙΣΜΕ ΤΗΣ " + date.getDate() + "/" + month + "/" + year}</span>`;
+    header.innerHTML = `<span style="font-weight:bold">${dayNames[selectedDate.getDay()]}<br>
+        ${"ΚΑΤΑΣΤΑΣΗ ΥΠΗΡΕΣΙΩΝ ΛΣ/ΔΙΣΜΕ ΤΗΣ " + selectedDate.getDate() + "/" + (selectedDate.getMonth() + 1) + "/" + selectedDate.getFullYear()}</span>`;
 }
 
 // Prev/Next listeners
