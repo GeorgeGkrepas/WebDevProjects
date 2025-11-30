@@ -3,7 +3,34 @@
     font-size: large;
 }
 
-h1{
+.page_top{
+    position: flex;
+    width: 100%;
+    align-items: center;
+    list-style: none;
+}
+
+.page_top button{
+    position: absolute;
+    left: 6px;
+    font-size: large;
+    cursor: pointer;
+    border: black solid 2px;
+    border-radius: 20px;
+    width: 180px;
+    height: 30px;
+    font-size: medium;
+}
+
+.page_top button:hover{
+    background-color: gray;
+}
+
+.page_top button:active{
+    background-color: rgb(94, 94, 94);
+}
+
+.page_top h1{
     text-align: center;
     font-size: x-large;
     text-decoration: underline;
@@ -95,6 +122,10 @@ h2{
 
 .days button:hover {
     background-color: gray;
+}
+
+.days button:active {
+    background-color: rgb(94, 94, 94);
 }
 
 .day-details {
