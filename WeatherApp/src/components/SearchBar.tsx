@@ -23,6 +23,9 @@ export const SearchBar = ({setResults}:SearchBarProps) => {
       })
       .catch(error => {console.error('Error fetching search data:', error)})
     }
+    else {
+      setResults([])
+    }
   }
 
   const handleChange = (value: string) => {
@@ -33,7 +36,7 @@ export const SearchBar = ({setResults}:SearchBarProps) => {
   return (
     <div className="input-wrapper">
         <FaSearch id="search-icon" />
-        <input placeholder="Type to search..." value={input} onChange={(e) => handleChange(e.target.value)}/>
+        <input placeholder="Search for a city..." value={input} onChange={(e) => handleChange(e.target.value)}/>
     </div>
   )
 }

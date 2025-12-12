@@ -1,0 +1,11 @@
+h2 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.forecast-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
