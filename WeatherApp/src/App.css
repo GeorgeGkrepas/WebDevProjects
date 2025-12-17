@@ -1,7 +1,10 @@
-.App {
+.app {
   background-color: #eee;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
@@ -9,24 +12,51 @@ h1 {
   padding-top: 20px;
 }
 
-.search-bar-container {
-  padding-top: 2vh;
-  width: 40%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 200px;
+h2 {
+  text-align: center;
+  padding-top: 10px;
 }
 
-.data-visual{
-  padding-top: 2vh;
-  padding-bottom: 2vh;
-  width: 40%;
-  margin: auto;
+.misc-data {
+  display: flex;
+  
+  min-width: 200px;
+  outline: 2px solid #ccc;
+  width: 20%;
+  height: 85%;
+  justify-content: center;
+}
+
+.middle-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  width: 60%;
+}
+
+.search-bar-container {
+  padding-top: 2vh;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.data-visual {
+  padding: 2vh 0;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: 2px solid #ccc;
+}
+
+.hourly-weather {
+  display: grid;
   min-width: 200px;
   outline: 2px solid #ccc;
+  width: 20%;
+  height: 85%;
+  justify-content: center;
 }

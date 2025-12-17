@@ -3,6 +3,7 @@ import './App.css'
 import { SearchBar } from './components/SearchBar'
 import { SearchResultsList } from './components/SearchResultsList'
 import { Forecast } from './components/Forecast'
+import { HourlyWeather } from './components/HourlyWeather'
 
 function App() {
 
@@ -13,13 +14,22 @@ function App() {
   return (
     <>
       <div className="app">
-        <h1>Weather App</h1>
-        <div className="search-bar-container">
-          <SearchBar setResults={setResults}/>
-          <SearchResultsList results={results} setSelectedId={setSelectedId} setCityName={setCityName}/>
+        <div className="misc-data">
+          <h2>Misc Data</h2>
         </div>
-        <div className="data-visual">
-          <Forecast CityId={selectedId} CityName={cityName} />
+        <div className="middle-section">
+          <h1>Weather App</h1>
+          <div className="search-bar-container">
+            <SearchBar setResults={setResults}/>
+            <SearchResultsList results={results} setSelectedId={setSelectedId} setCityName={setCityName}/>
+          </div>
+          <div className="data-visual">
+            <Forecast CityId={selectedId} CityName={cityName} />
+          </div>
+        </div>
+        <div className="hourly-weather">
+          <h2>Hourly Weather</h2>
+          <HourlyWeather cityId={selectedId}/>
         </div>
       </div>
     </>
