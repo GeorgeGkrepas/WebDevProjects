@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ForecastDay } from "./ForecastDay";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./Forecast.css"
 
@@ -14,22 +14,33 @@ export const Forecast = ({CityId, CityName}:ForecastProps) => {
     const [results, setResults] = useState<any[]>([])
     const [currentWeather, setCurrentWeather] = useState<any>()
 
-    if (CityId !== "") {
-        axios.get(`http://api.weatherapi.com/v1/forecast.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=id:${CityId}&days=3&lang=en`)
-      .then(response => {
-        setResults(response.data.forecast.forecastday);
-      })
-      .catch(error => {console.error('Error fetching forecast data:', error)})
-    }
+    useEffect(() => {
+      if (!CityId) return;
 
-    if (CityId !== "") {
-        axios.get(`http://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=id:${CityId}&lang=en`)
-      .then(response => {
-        setCurrentWeather(response.data);
-      })
-      .catch(error => {console.error('Error fetching current weather data:', error)})
-    }
+      const fetchData = async () => {
+        try {
+          const [forecastRes, currentRes] = await Promise.all([
+            axios.get(
+              `http://api.weatherapi.com/v1/forecast.json?key=${
+                import.meta.env.VITE_WEATHER_API_KEY
+              }&q=id:${CityId}&days=3&lang=en`
+            ),
+            axios.get(
+              `http://api.weatherapi.com/v1/current.json?key=${
+                import.meta.env.VITE_WEATHER_API_KEY
+              }&q=id:${CityId}&lang=en`
+            ),
+          ]);
 
+          setResults(forecastRes.data.forecast.forecastday);
+          setCurrentWeather(currentRes.data);
+        } catch (error) {
+          console.error("Error fetching weather data:", error);
+        }
+    };
+
+    fetchData();
+  }, [CityId]);
 
     return (
       <>
