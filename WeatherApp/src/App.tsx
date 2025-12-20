@@ -4,6 +4,7 @@ import { SearchBar } from './components/SearchBar'
 import { SearchResultsList } from './components/SearchResultsList'
 import { Forecast } from './components/Forecast'
 import { HourlyWeather } from './components/HourlyWeather'
+import { MiscData } from './components/MiscData'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       <div className="app">
         <div className="misc-data">
           <h2>Misc Data</h2>
+          <MiscData cityId={selectedId}/>
         </div>
         <div className="middle-section">
           <h1>Weather App</h1>
@@ -28,7 +30,7 @@ function App() {
           </div>
         </div>
         <div className="hourly-weather">
-          <h2>Hourly Weather</h2>
+          <h2>Next 24 hrs</h2>
           <HourlyWeather cityId={selectedId}/>
         </div>
       </div>
