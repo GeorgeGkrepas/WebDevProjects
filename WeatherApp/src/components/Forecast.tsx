@@ -5,17 +5,18 @@ import { useState, useEffect } from "react";
 import "./Forecast.css"
 
 interface ForecastProps {
-  CityId: string;
-  CityName: string;
+  cityId: string;
+  cityName: string;
+  degreeUnit: string;
 }
 
-export const Forecast = ({CityId, CityName}:ForecastProps) => {
+export const Forecast = ({cityId, cityName, degreeUnit}:ForecastProps) => {
 
     const [results, setResults] = useState<any[]>([])
     const [currentWeather, setCurrentWeather] = useState<any>()
 
     useEffect(() => {
-      if (!CityId) return;
+      if (!cityId) return;
 
       const fetchData = async () => {
         try {
@@ -23,12 +24,12 @@ export const Forecast = ({CityId, CityName}:ForecastProps) => {
             axios.get(
               `http://api.weatherapi.com/v1/forecast.json?key=${
                 import.meta.env.VITE_WEATHER_API_KEY
-              }&q=id:${CityId}&days=3&lang=en`
+              }&q=id:${cityId}&days=3&lang=en`
             ),
             axios.get(
               `http://api.weatherapi.com/v1/current.json?key=${
                 import.meta.env.VITE_WEATHER_API_KEY
-              }&q=id:${CityId}&lang=en`
+              }&q=id:${cityId}&lang=en`
             ),
           ]);
 
@@ -40,12 +41,12 @@ export const Forecast = ({CityId, CityName}:ForecastProps) => {
     };
 
     fetchData();
-  }, [CityId]);
+  }, [cityId]);
 
     return (
       <>
         <h2>Forecast</h2>
-        <h4>{CityName}</h4>
+        <h4>{cityName}</h4>
         {currentWeather && (
           <div className="current-weather">
             <u><strong>Current Weather</strong></u><br/>
@@ -53,12 +54,17 @@ export const Forecast = ({CityId, CityName}:ForecastProps) => {
               src={currentWeather.current.condition.icon}
               alt={currentWeather.current.condition.text}
             /><br/>
-            {currentWeather.current.temp_c}°C, feels like {currentWeather.current.feelslike_c}°C
+            {degreeUnit === "celsius" && (<>
+              {currentWeather.current.temp_c}°C, feels like {currentWeather.current.feelslike_c}°C
+            </>)}
+            {degreeUnit === "fahrenheit" && (<>
+              {currentWeather.current.temp_f}°F, feels like {currentWeather.current.feelslike_f}°F
+            </>)}
           </div>
         )}
         <div className="forecast-list">
           {results.map((result, day) => {
-              return <div key={day}><ForecastDay forecastDay={result} index={day} key={day} /></div>
+              return <div key={day}><ForecastDay forecastDay={result} index={day} degreeUnit={degreeUnit} key={day} /></div>
           })}
         </div>
       </>

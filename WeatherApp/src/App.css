@@ -53,6 +53,14 @@ h2 {
   outline: 2px solid #ccc;
 }
 
+.degree-select {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: medium;
+  
+}
+
 .hourly-weather {
   display: grid;
   min-width: 200px;

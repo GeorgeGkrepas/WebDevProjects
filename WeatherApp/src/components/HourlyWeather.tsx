@@ -5,9 +5,10 @@
 
   interface HourlyWeatherProps {
     cityId: string;
+    degreeUnit: string;
   }
 
-  export const HourlyWeather = ({cityId}: HourlyWeatherProps) => {
+  export const HourlyWeather = ({cityId, degreeUnit}: HourlyWeatherProps) => {
 
     const [results, setResults] = useState<any[]>([])
 
@@ -43,7 +44,12 @@
                   <li key={result.time}>
                     <strong>{result.time}</strong><br />
                     <img src={result.condition.icon} alt={result.condition.text} /><br/>
-                    {result.temp_c}°C
+                    {degreeUnit === "celsius" && (<>
+                      {result.temp_c}°C
+                    </>)}
+                    {degreeUnit === "fahrenheit" && (<>
+                      {result.temp_f}°F
+                    </>)}
                   </li>
                 ))}
               </ul>
