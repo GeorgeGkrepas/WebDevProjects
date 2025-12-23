@@ -42,7 +42,8 @@ export const MiscData = ({cityId}: MiscDataProps) => {
                     <li>
                         <div className="title">UV Index</div>
                         <div className="data">{currentWeather.uv}</div>
-                        <div className="note">(On a scale of 1-11)</div>
+                        <div className="note">On a scale of 1-11</div>
+                        <div className="note">while 0 means night</div>
                     </li>
                 </ul>
             </div>
