@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerUser } from "./firebase.tsx";
+import { loginUser, registerUser } from "./firebase.tsx";
 
 interface ModalProps {
     isOpen?: boolean;
@@ -12,6 +12,8 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (title === "Sign Up Modal") {
       e.preventDefault();
@@ -20,11 +22,18 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
       }
       catch (error) {
         console.error("Error during registration:", error);
+        setErrorMsg(error instanceof Error ? error.message : "An unknown error occurred");
       }
     }
     if (title === "Log In Modal") {
       e.preventDefault();
-      // Implement login logic here
+      try {
+        await loginUser(email, password);
+      }
+      catch (error) {
+        console.error("Error during login:", error);
+        setErrorMsg(error instanceof Error ? error.message : "An unknown error occurred");
+      }
     }
   };
 
@@ -35,6 +44,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
           ${isOpen ? 'block' : 'hidden'}`}>
           <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
 
+          {errorMsg && <p className="text-red-500 mb-4">{errorMsg}</p>}
           <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <input
               type="text"

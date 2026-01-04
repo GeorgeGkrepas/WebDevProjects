@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <div className="bg-gray-300 min-h-screen">
-        <Navbar setOpenModal={setOpenModal} />
+        <Navbar openModal={openModal} setOpenModal={setOpenModal} />
         <Modal isOpen={openModal === "login"} title="Log In Modal" />
         <Modal isOpen={openModal === "signup"} title="Sign Up Modal" />
       </div>
