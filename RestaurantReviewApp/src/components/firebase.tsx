@@ -30,3 +30,7 @@ export const registerUser = (email: string, password: string, username: string) 
 export const loginUser = (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 }
+
+export const logoutUser = () => {
+  return auth.signOut();
+}

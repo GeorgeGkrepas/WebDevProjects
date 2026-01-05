@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase.tsx";
 import { loginUser, registerUser } from "./firebase.tsx";
 
 interface ModalProps {
@@ -14,8 +17,23 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const resetForm = () => {
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setErrorMsg(null);
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        resetForm();
+      }
+    })
+  }, [])
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    if (title === "Sign Up Modal") {
+    if (title === "Sign Up") { // Sign Up Modal Functionality
       e.preventDefault();
       try {
         await registerUser(email, password, username);
@@ -25,7 +43,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
         setErrorMsg(error instanceof Error ? error.message : "An unknown error occurred");
       }
     }
-    if (title === "Log In Modal") {
+    if (title === "Log In") { // Log In Modal Functionality
       e.preventDefault();
       try {
         await loginUser(email, password);
@@ -37,7 +55,8 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
     }
   };
 
-  if (isOpen && title === "Sign Up Modal") {
+  // Sign Up Modal
+  if (isOpen && title === "Sign Up") {
     return (
       <>
         <div className={`bg-teal-950 text-white p-8 rounded-lg shadow-lg w-1/3 mx-auto mt-20 items-center justify-center 
@@ -83,8 +102,8 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
         </div>
       </>
     )
-  }
-  else if (isOpen && title === "Log In Modal") {
+  } // Log In Modal
+  else if (isOpen && title === "Log In") {
     return (
       <>
         <div className={`bg-teal-950 text-white p-8 rounded-lg shadow-lg w-1/3 mx-auto mt-20 items-center justify-center 
@@ -114,7 +133,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 transition p-2 rounded"
             >
-              Create Account
+              Log In
             </button>
           </form>
         </div>
