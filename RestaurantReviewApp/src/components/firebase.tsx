@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -20,11 +21,23 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-export { app, auth };
+const db = getFirestore(app);
 
-export const registerUser = (email: string, password: string, username: string) => {
-  return createUserWithEmailAndPassword(auth, email, password)
-    .then((response) => {updateProfile(response.user, { displayName: username })});
+export { app, auth, db };
+
+export const registerUser = async (email: string, password: string, username: string) => {
+  const response = await createUserWithEmailAndPassword(auth, email, password);
+
+  await updateProfile(response.user, {displayName: username});
+
+  //Force token refresh so onIdTokenChanged fires
+  await response.user.getIdToken(true);
+
+  return response;
+};
+
+export const verifyUser = () => {
+  return sendEmailVerification(auth.currentUser!);
 }
 
 export const loginUser = (email: string, password: string) => {

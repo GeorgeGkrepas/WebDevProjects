@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase.tsx";
-import { loginUser, registerUser } from "./firebase.tsx";
+import { auth, loginUser, registerUser, verifyUser } from "./firebase.tsx";
 
 interface ModalProps {
     isOpen?: boolean;
@@ -36,7 +35,14 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
     if (title === "Sign Up") { // Sign Up Modal Functionality
       e.preventDefault();
       try {
-        await registerUser(email, password, username);
+        await registerUser(email, password, username)
+        .then(async () => {
+          await verifyUser().then(() => {
+            console.log("Verification email sent");
+          }).catch((error) => {
+            console.error("Error sending verification email:", error);
+          });
+        });
       }
       catch (error) {
         console.error("Error during registration:", error);
@@ -110,6 +116,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
           ${isOpen ? 'block' : 'hidden'}`}>
           <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
 
+          {errorMsg && <p className="text-red-500 mb-4">{errorMsg}</p>}
           <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <input
               type="email"

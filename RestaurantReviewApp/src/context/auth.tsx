@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from "firebase/auth";
+import { onIdTokenChanged } from "firebase/auth";
 import { createContext, useEffect, useState, useContext } from "react";
 import type { ReactNode } from "react";
 import { auth } from "../components/firebase";
@@ -6,6 +6,7 @@ import { auth } from "../components/firebase";
 interface AuthUser {
     email: string | null;
     username: string | null;
+    emailVerified: boolean;
 }
 
 interface AuthContextType {
@@ -29,11 +30,12 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
     useEffect(() => {
-        onAuthStateChanged(auth, user => {
+        onIdTokenChanged(auth, user => {
             if (user) {
                 setCurrentUser({
                     email: user.email,
                     username: user.displayName,
+                    emailVerified: user.emailVerified
                 });
             }
             else {
