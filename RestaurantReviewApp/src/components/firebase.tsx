@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -25,6 +25,10 @@ const db = getFirestore(app);
 
 export { app, auth, db };
 
+
+//---------------------- Authentication Functions --------------------
+
+
 export const registerUser = async (email: string, password: string, username: string) => {
   const response = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -32,6 +36,20 @@ export const registerUser = async (email: string, password: string, username: st
 
   //Force token refresh so onIdTokenChanged fires
   await response.user.getIdToken(true);
+
+  const uid = response.user.uid
+
+  // Create a new document using the uid as the document id
+  const data = {
+    username: username,
+  }
+
+  const userRef = doc(db, "Users", response.user.uid);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    await setDoc(doc(db, "Users", uid), data)
+  }
 
   return response;
 };
@@ -47,3 +65,6 @@ export const loginUser = (email: string, password: string) => {
 export const logoutUser = () => {
   return auth.signOut();
 }
+
+
+//---------------------- Firestore Database Functions --------------------
