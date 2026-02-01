@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, onSnapshot, query } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -42,6 +42,7 @@ export const registerUser = async (email: string, password: string, username: st
   // Create a new document using the uid as the document id
   const data = {
     username: username,
+    createdAt: new Date(),
   }
 
   const userRef = doc(db, "Users", response.user.uid);
@@ -68,3 +69,43 @@ export const logoutUser = () => {
 
 
 //---------------------- Firestore Database Functions --------------------
+
+export const addReview = async (restaurantName: string, rating: string, favoriteDishes: string, comments: string): Promise<void> => {
+  
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  
+  const data = {
+    restaurantName: restaurantName,
+    rating: rating,
+    favoriteDishes: favoriteDishes,
+    comments: comments
+  }
+
+  const reviewsRef = doc(db, "Users", user.uid, "Reviews", restaurantName); //The restaurant name is also used as the document ID
+  await setDoc(reviewsRef, data);
+}
+
+export const listenToReviews = (userId: string, callback: (reviews: any[]) => void) => {
+
+  const reviewsRef = collection(db, "Users", userId, "Reviews");
+  const q = query(reviewsRef);
+
+  return onSnapshot(q, (snapshot) => {
+    const reviews = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    callback(reviews);
+  });
+}
+
+export const deleteReview = async (restaurantName: string): Promise<void> => {
+
+  const user = auth.currentUser;
+  const reviewDocRef = doc(db, "Users", user!.uid, "Reviews", restaurantName);
+
+  await deleteDoc(reviewDocRef);
+}

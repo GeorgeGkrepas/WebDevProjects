@@ -6,11 +6,11 @@ import { logoutUser } from "./firebase";
 interface NavbarProps {
   openModal: "login" | "signup" | null;
   setOpenModal: (modal: "login" | "signup" | null) => void;
+  setActiveSection: (section: "reviews" | "analytics" | "profile") => void;
 }
 
 
-export const Navbar = ({ openModal, setOpenModal }: NavbarProps) => {
-
+export const Navbar = ({ openModal, setOpenModal, setActiveSection }: NavbarProps) => {
   const { currentUser } = useAuth();
 
   return (
@@ -19,6 +19,15 @@ export const Navbar = ({ openModal, setOpenModal }: NavbarProps) => {
         <div className="text-2xl font-bold text-white">
           Restaurant Reviews
         </div>
+
+        <div className="flex gap-4 text-base">
+          {currentUser !==null && currentUser.emailVerified && <Fragment>
+            <NavLink linkName="Reviews" onClick={() => setActiveSection("reviews")} />
+            <NavLink linkName="Analytics" onClick={() => setActiveSection("analytics")} />
+            <NavLink linkName="Profile" onClick={() => setActiveSection("profile")} />
+          </Fragment>}
+        </div>
+
         <div className="text-base flex gap-4">
           {currentUser === null && <Fragment>
             <NavLink linkName="Log In" onClick={() => openModal === "login" ? setOpenModal(null) : setOpenModal("login")} />

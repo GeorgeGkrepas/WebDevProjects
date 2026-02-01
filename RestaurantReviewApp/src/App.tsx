@@ -1,15 +1,17 @@
 "use client"
-import { Fragment, useEffect, useState } from "react"
+import { act, Fragment, useEffect, useState } from "react"
 import { onAuthStateChanged } from "firebase/auth";
 import { Navbar } from "./components/Navbar"
 import { Modal } from "./components/Modal"
 import { auth, verifyUser } from "./components/firebase";
 import { useAuth } from "./context/auth";
+import { ReviewSection } from "./components/ReviewSection";
 
 function App() {
 
   const {currentUser} = useAuth();
   const [openModal, setOpenModal] = useState<"login" | "signup" | null>(null);
+  const [activeSection, setActiveSection] = useState<"reviews" | "analytics" | "profile">("reviews");
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
@@ -31,7 +33,7 @@ function App() {
   return (
     <>
       <div className="bg-gray-300 min-h-screen">
-        <Navbar openModal={openModal} setOpenModal={setOpenModal} />
+        <Navbar openModal={openModal} setOpenModal={setOpenModal} setActiveSection={setActiveSection} />
 
         {/* Not logged in */}
         {currentUser === null && <Fragment>
@@ -63,7 +65,9 @@ function App() {
 
         {/* Logged in and verified */}
         {currentUser !== null && currentUser.emailVerified && <Fragment>
-          
+          {activeSection === "reviews" && <ReviewSection />}
+          {activeSection === "analytics" && <div className="mx-auto mt-10 p-4 bg-white border border-gray-300 rounded shadow text-center">Analytics Section Coming Soon!</div>}
+          {activeSection === "profile" && <div className="mx-auto mt-10 p-4 bg-white border border-gray-300 rounded shadow text-center">Profile Section Coming Soon!</div>}
         </Fragment>}
       </div>
     </>
