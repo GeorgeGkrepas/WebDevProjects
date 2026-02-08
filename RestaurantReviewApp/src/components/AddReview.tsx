@@ -1,19 +1,42 @@
 import { useState, type FormEvent } from "react";
+import Select from "react-select";
 import { addReview } from "./firebase"
+
+// Define category options for React Select
+    const categoryOptions = [
+        { value: "🍕Pizza", label: "🍕Pizza" },
+        { value: "🍝Pasta", label: "🍝Pasta" },
+        { value: "🍔Burgers", label: "🍔Burgers" },
+        { value: "🍜Noodles", label: "🍜Noodles" },
+        { value: "🍣Sushi", label: "🍣Sushi" },
+        { value: "🍰Desserts", label: "🍰Desserts" },
+        { value: "🍗Fried Chicken", label: "🍗Fried Chicken" },
+        { value: "🥪Sandwiches", label: "🥪Sandwiches" },
+        { value: "🥗Salads", label: "🥗Salads" },
+        { value: "🍖BBQ", label: "🍖BBQ" },
+        { value: "🌮Tacos", label: "🌮Tacos" },
+        { value: "☕Coffee", label: "☕Coffee" },
+        { value: "🍹Drinks", label: "🍹Drinks" }
+    ];
 
 export const AddReview = () => {
 
     const [restaurantName, setRestaurantName] = useState("");
     const [rating, setRating] = useState("");
+    const [category, setCategory] = useState<any[]>([]);
     const [favoriteDishes, setFavoriteDishes] = useState("");
     const [comments, setComments] = useState("");
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // Convert selected categories to a comma-separated string
+        const categories = category.map(c => c.value).join(", ");
+
         await addReview(
         restaurantName,
         rating,
+        categories,
         favoriteDishes,
         comments
         );
@@ -21,6 +44,7 @@ export const AddReview = () => {
         // optional: reset form
         setRestaurantName("");
         setRating("");
+        setCategory([]);
         setFavoriteDishes("");
         setComments("");
     };
@@ -46,6 +70,20 @@ export const AddReview = () => {
                     <option value="4">4⭐</option>
                     <option value="5">5⭐</option>
                 </select>
+
+                
+
+                <div className="w-full md:w-56">
+                    <Select
+                        isMulti
+                        options={categoryOptions}
+                        value={category}
+                        onChange={(selected) => setCategory(selected as any[])}
+                        placeholder="Select Categories"
+                        className="text-black bg-gray-300 rounded"
+                        classNamePrefix="react-select"
+                    />
+                </div>
 
                 <input
                     type="text"
