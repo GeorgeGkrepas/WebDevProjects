@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, onSnapshot, query } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword,
+   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc, getDocs, deleteDoc, collection, onSnapshot, query } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -18,7 +18,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
 const db = getFirestore(app);
@@ -67,10 +66,15 @@ export const logoutUser = () => {
   return auth.signOut();
 }
 
+export const reauthenticateUser = async (currentPassword: string) => {
+  const credential = EmailAuthProvider.credential(auth.currentUser!.email!, currentPassword);
+  return await reauthenticateWithCredential(auth.currentUser!, credential);
+}
+
 
 //---------------------- Firestore Database Functions --------------------
 
-export const addReview = async (restaurantName: string, rating: string, favoriteDishes: string, comments: string): Promise<void> => {
+export const addReview = async (restaurantName: string, rating: string, category: string, favoriteDishes: string, comments: string): Promise<void> => {
   
   const user = auth.currentUser;
   if (!user) {
@@ -80,6 +84,7 @@ export const addReview = async (restaurantName: string, rating: string, favorite
   const data = {
     restaurantName: restaurantName,
     rating: rating,
+    category: category,
     favoriteDishes: favoriteDishes,
     comments: comments
   }
@@ -108,4 +113,16 @@ export const deleteReview = async (restaurantName: string): Promise<void> => {
   const reviewDocRef = doc(db, "Users", user!.uid, "Reviews", restaurantName);
 
   await deleteDoc(reviewDocRef);
+}
+
+export const getReviews = async (userId: string): Promise<any[]> => {
+
+  const reviewsRef = collection(db, "Users", userId, "Reviews");
+  const snapshot = await getDocs(reviewsRef);
+  const reviews = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return reviews;
 }
