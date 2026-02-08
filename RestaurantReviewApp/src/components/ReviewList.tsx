@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { listenToReviews, deleteReview } from "./firebase";
 import { getAuth } from "firebase/auth";
+import { useConfirm } from "./ConfirmModal";
 
 export const ReviewList = () => {
   
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const confirm = useConfirm();
 
   useEffect(() => {
     const user = getAuth().currentUser;
@@ -23,6 +26,19 @@ export const ReviewList = () => {
     return <p>Loading reviews...</p>;
   }
 
+  const handleDelete = async (restaurantName: string) => {
+    if(
+        await confirm.confirm({
+          title: "Delete Review",
+          message: 'Are you sure you want to delete your review for "' + restaurantName + '"?',
+          confirmText: "Delete",
+          cancelText: "Cancel",
+          danger: true,
+        })
+      ){
+        await deleteReview(restaurantName);
+      }
+  }
   
   return (
     <div className="max-w-2xl mx-auto">
@@ -36,7 +52,7 @@ export const ReviewList = () => {
           <li key={review.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-800">
-                {review.restaurantName}
+                {review.restaurantName}  <span className="text-sm text-gray-500">({review.category})</span>
               </h3>
               <span className="text-yellow-500">
                 {"⭐".repeat(review.rating)}
@@ -53,7 +69,7 @@ export const ReviewList = () => {
                 <span className="font-medium">Comments:</span>{" "}
                 {review.comments}
               </p>
-              <span onClick={() => deleteReview(review.id)} className="cursor-pointer">
+              <span onClick={() => handleDelete(review.id)} className="cursor-pointer">
                 <img src="../images/Red_X.png" alt="Delete" className="w-6 h-6"></img>
               </span>
             </div>

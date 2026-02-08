@@ -2,16 +2,33 @@ import { Fragment } from "react/jsx-runtime";
 import { useAuth } from "../context/auth";
 import { NavLink } from "./NavLink"
 import { logoutUser } from "./firebase";
+import { useConfirm } from "./ConfirmModal";
 
 interface NavbarProps {
   openModal: "login" | "signup" | null;
   setOpenModal: (modal: "login" | "signup" | null) => void;
-  setActiveSection: (section: "reviews" | "analytics" | "profile") => void;
+  setActiveSection: (section: "reviews" | "analytics" | "friends" | "profile") => void;
 }
 
 
 export const Navbar = ({ openModal, setOpenModal, setActiveSection }: NavbarProps) => {
   const { currentUser } = useAuth();
+
+  const confirm = useConfirm();
+
+  const confirmLogout = async () => {
+    if(
+        await confirm.confirm({
+          title: "Log Out",
+          message: 'Are you sure you want to log out?',
+          confirmText: "Yes",
+          cancelText: "No",
+          danger: false,
+        })
+      ){
+        logoutUser();
+      }
+    }
 
   return (
     <>
@@ -20,10 +37,11 @@ export const Navbar = ({ openModal, setOpenModal, setActiveSection }: NavbarProp
           Restaurant Reviews
         </div>
 
-        <div className="flex gap-4 text-base">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-4 text-base">
           {currentUser !==null && currentUser.emailVerified && <Fragment>
             <NavLink linkName="Reviews" onClick={() => setActiveSection("reviews")} />
             <NavLink linkName="Analytics" onClick={() => setActiveSection("analytics")} />
+            <NavLink linkName="Friends" onClick={() => setActiveSection("friends")} />
             <NavLink linkName="Profile" onClick={() => setActiveSection("profile")} />
           </Fragment>}
         </div>
@@ -33,10 +51,7 @@ export const Navbar = ({ openModal, setOpenModal, setActiveSection }: NavbarProp
             <NavLink linkName="Log In" onClick={() => openModal === "login" ? setOpenModal(null) : setOpenModal("login")} />
             <NavLink linkName="Sign Up" onClick={() => openModal === "signup" ? setOpenModal(null) : setOpenModal("signup")} />
           </Fragment>}
-          {currentUser !== null && <Fragment>
-            <span className="text-white">Hello, {currentUser?.username}! {currentUser.emailVerified ? " ✅" : " ❌"}</span>
-            <NavLink linkName="Log Out" onClick={() => {logoutUser()}} />
-          </Fragment>}
+          {currentUser !== null && <NavLink linkName="Log Out" onClick={() => confirmLogout()} />}
         </div>
       </header>
     </>
