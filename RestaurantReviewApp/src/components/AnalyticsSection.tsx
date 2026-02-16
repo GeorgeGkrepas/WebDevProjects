@@ -3,7 +3,7 @@ import { Doughnut } from "react-chartjs-2"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import type { ChartData, ChartOptions } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { auth, getReviews } from "./firebase";
+import { auth, listenToReviews } from "./firebase";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
@@ -36,13 +36,19 @@ export const AnalyticsSection = () => {
     const [totalReviews, setTotalReviews] = useState(0);
 
     useEffect(() => {
-        const fetchData = async () => {
             const user = auth.currentUser;
             if (!user) return;
 
-            const reviews = await getReviews(user.uid);
-            const categoryCounts: Record<string, number> = {};
-            const ratingCounts: Record<string, number> = { "5⭐": 0, "4⭐": 0, "3⭐": 0, "2⭐": 0, "1⭐": 0 };
+            const unsubscribe = listenToReviews(user.uid, (reviews) => {
+                const categoryCounts: Record<string, number> = {};
+                const ratingCounts: Record<string, number> = {
+                "5⭐": 0,
+                "4⭐": 0,
+                "3⭐": 0,
+                "2⭐": 0,
+                "1⭐": 0,
+                };
+                
 
             reviews.forEach(review => {
                 const categories = review.category.split(",").map((c: string) => c.trim());
@@ -57,6 +63,20 @@ export const AnalyticsSection = () => {
             });
 
             setTotalReviews(reviews.length);
+
+            if (reviews.length === 0) { // Handle case with no reviews to avoid empty charts
+                setCategoryChartData({
+                    labels: [],
+                    datasets: [{ data: [], backgroundColor: [] }]
+                });
+
+                setRatingChartData({
+                    labels: [],
+                    datasets: [{ data: [], backgroundColor: [] }]
+                });
+
+                return;
+            }
 
             const categoryLabels = Object.keys(categoryCounts);
             const categoryData = Object.values(categoryCounts);
@@ -94,9 +114,9 @@ export const AnalyticsSection = () => {
                     },
                 ],
                 });
-        };
+        });
 
-        fetchData();
+        return () => unsubscribe();
     }, []);
 
     const categoryChartOptions: ChartOptions<"doughnut"> = {
@@ -169,11 +189,19 @@ export const AnalyticsSection = () => {
             <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center p-8">
                 <div className="flex flex-row items-center justify-between w-full max-w-6xl">
                     {/*Reviews by Category Chart */}
+                    {totalReviews === 0 ? (
+                        <div className="flex items-center justify-center p-4 bg-white border border-gray-300 rounded shadow max-w-sm max-h-96 w-full h-96">
+                            <p className="text-lg font-semibold text-gray-500">
+                                No reviews yet 🍽️
+                            </p>
+                        </div>
+                    ) : (
                     <Doughnut
                         className="p-4 bg-white border border-gray-300 rounded shadow max-w-sm max-h-96"
                         data={categoryChartData}
                         options={categoryChartOptions}
                     />
+                    )}
 
                     {/* Total Reviews */}
                     <div className="flex flex-col items-center justify-center p-6 bg-white border border-gray-300 rounded shadow w-36 h-36">
@@ -182,11 +210,19 @@ export const AnalyticsSection = () => {
                     </div>
 
                     {/* Reviews by Rating Chart */}
+                    {totalReviews === 0 ? (
+                        <div className="flex items-center justify-center p-4 bg-white border border-gray-300 rounded shadow max-w-sm max-h-96 w-full h-96">
+                            <p className="text-lg font-semibold text-gray-500">
+                                No reviews yet 🍽️
+                            </p>
+                        </div>
+                    ) : (
                     <Doughnut
                         className="p-4 bg-white border border-gray-300 rounded shadow max-w-sm max-h-96"
                         data={ratingChartData}
                         options={ratingChartOptions}
                     />
+                    )}
                 </div>
             </div>
         </>
