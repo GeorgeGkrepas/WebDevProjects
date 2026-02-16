@@ -6,6 +6,7 @@ import { auth } from "../components/firebase";
 interface AuthUser {
     email: string | null;
     username: string | null;
+    uid: string;
     emailVerified: boolean;
 }
 
@@ -35,6 +36,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
                 setCurrentUser({
                     email: user.email,
                     username: user.displayName,
+                    uid: user.uid,
                     emailVerified: user.emailVerified
                 });
             }
