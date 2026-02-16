@@ -36,7 +36,7 @@ function App() {
   return (
     <>
       <div className="bg-gray-300 min-h-screen">
-        <Navbar openModal={openModal} setOpenModal={setOpenModal} setActiveSection={setActiveSection} />
+        <Navbar openModal={openModal} setOpenModal={setOpenModal} setActiveSection={setActiveSection} activeSection={activeSection} />
 
         {/* Not logged in */}
         {currentUser === null && <Fragment>
