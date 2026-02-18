@@ -65,7 +65,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
   if (isOpen && title === "Sign Up") {
     return (
       <>
-        <div className={`bg-teal-950 text-white p-8 rounded-lg shadow-lg w-1/3 mx-auto mt-20 items-center justify-center 
+        <div className={`bg-white text-black border-4 border-slate-800 rounded-lg shadow-lg w-1/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 
           ${isOpen ? 'block' : 'hidden'}`}>
           <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
 
@@ -85,7 +85,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="p-2 rounded text-white outline"
+              className="p-2 rounded text-black outline outline-black"
               required
             />
 
@@ -94,7 +94,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="p-2 rounded text-white outline"
+              className="p-2 rounded text-black outline outline-black"
               required
             />
 
@@ -112,7 +112,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
   else if (isOpen && title === "Log In") {
     return (
       <>
-        <div className={`bg-teal-950 text-white p-8 rounded-lg shadow-lg w-1/3 mx-auto mt-20 items-center justify-center 
+        <div className={`bg-white text-black border-4 border-slate-800 rounded-lg shadow-lg w-1/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8  
           ${isOpen ? 'block' : 'hidden'}`}>
           <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
 
@@ -123,7 +123,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="p-2 rounded text-white outline"
+              className="p-2 rounded text-black outline outline-black"
               required
             />
 
@@ -132,7 +132,7 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="p-2 rounded text-white outline"
+              className="p-2 rounded text-black outline outline-black"
               required
             />
 

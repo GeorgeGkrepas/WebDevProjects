@@ -144,7 +144,7 @@ export const ProfileSection = () => {
                                                                       text-sm font-semibold text-white transition
                                                                       hover:bg-blue-700
                                                                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                                                                      disabled:cursor-not-allowed disabled:opacity-50">
+                                                                      disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer">
                       Update Password
                   </button>
               </form>
@@ -157,11 +157,9 @@ export const ProfileSection = () => {
               <p className="mt-1 text-sm text-red-600">Deleting your account is permanent and cannot be undone</p>
 
               <div className="mt-4 space-y-3">
-                  <label className="block text-sm font-medium text-red-700">Confirm your password</label>
-
                   <input
                       type="password"
-                      placeholder="Confirm deletion password"
+                      placeholder="Enter password to confirm"
                       value={deletionPassword}
                       onChange={(e) => setDeletionPassword(e.target.value)}
                       className="w-full rounded-lg border border-red-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400
@@ -171,7 +169,7 @@ export const ProfileSection = () => {
 
                   <button onClick={confirmDelete} disabled={loading} className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white
                                                                                       transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 
-                                                                                      focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                                                                      focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer">
                       Delete Account
                   </button>
               </div>

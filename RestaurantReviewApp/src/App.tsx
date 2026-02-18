@@ -9,6 +9,7 @@ import { ReviewSection } from "./components/ReviewSection";
 import { ProfileSection } from "./components/ProfileSection";
 import { AnalyticsSection } from "./components/AnalyticsSection";
 import { FriendsSection } from "./components/FriendsSection";
+import { LandingBackground } from "./components/LandingBackground";
 
 function App() {
 
@@ -35,11 +36,12 @@ function App() {
 
   return (
     <>
-      <div className="bg-gray-300 min-h-screen">
+      <div className="bg-gray-300 min-h-screen bg-linear-to-br from-gray-300 to-blue-300">
         <Navbar openModal={openModal} setOpenModal={setOpenModal} setActiveSection={setActiveSection} activeSection={activeSection} />
 
         {/* Not logged in */}
         {currentUser === null && <Fragment>
+          {openModal === null && <LandingBackground />}
           <Modal isOpen={openModal === "login"} title="Log In" />
           <Modal isOpen={openModal === "signup"} title="Sign Up" />
         </Fragment>}

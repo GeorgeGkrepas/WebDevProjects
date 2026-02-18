@@ -33,7 +33,7 @@ export const Navbar = ({ openModal, setOpenModal, setActiveSection, activeSectio
 
   return (
     <>
-      <header className="bg-gray-500 sticky top-0 z-20 mx-auto flex w-full items-center justify-between border-b border-gray-500 p-4">
+      <header className="bg-slate-600 sticky top-0 z-20 mx-auto flex w-full items-center justify-between border-b border-gray-500 p-4">
         <div className="text-2xl font-bold text-white">
           Restaurant Reviews 🍽️
         </div>

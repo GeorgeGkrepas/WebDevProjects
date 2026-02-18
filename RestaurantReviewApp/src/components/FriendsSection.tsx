@@ -59,7 +59,7 @@ export const FriendsSection = () => {
           (e.target as any).reset();
         }}>
           <input type="text" name="friendCode" placeholder="Enter friend's UID..." className="border border-gray-300 rounded-md px-3 py-2 outline-2 outline-blue-500" />
-          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Add Friend</button>
+          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">Add Friend</button>
         </form>
       </div>
 

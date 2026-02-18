@@ -98,9 +98,9 @@ export const ReviewList = () => {
   return (
     <div className="max-w-2xl mx-auto">
       
-      <div className="flex items-center flex-col justify-between mb-4 border-2 border-blue-950 rounded-lg p-4">
+      <div className="flex items-center flex-col justify-between mb-4 border-3 border-black rounded-lg p-4">
         <h2 className="text-black text-xl mb-2 font-bold underline">Filters</h2>
-        <input type="text" placeholder="Search for a review..." className="w-full rounded-md border p-2 mb-4 focus:outline-none focus:ring-2 border-blue-500" 
+        <input type="text" placeholder="Search for a review..." className="w-full rounded-md border p-2 mb-4 focus:outline-none border-blue-500" 
             onChange={(e) => setSearchQuery(e.target.value)}
         />
         <div className="w-full flex items-center gap-4">

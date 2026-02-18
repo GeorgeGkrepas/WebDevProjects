@@ -51,7 +51,8 @@ export const AddReview = () => {
     };
 
     return (
-        <div className="mx-auto p-4 outline-2 outline-gray-900 mb-6 rounded-xl">
+        <div className="mx-auto p-4 border-4 border-gray-900 mb-6 rounded-xl">
+            <h2 className="text-black text-xl mb-2 font-bold text-center underline">Add a review</h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <input
                     type="text"
