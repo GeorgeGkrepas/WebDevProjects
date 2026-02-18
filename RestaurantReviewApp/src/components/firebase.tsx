@@ -1,9 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword,
-   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential, 
-   onAuthStateChanged} from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, getDocs, deleteDoc, collection, onSnapshot, query, updateDoc } from "firebase/firestore";
+   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential} from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, onSnapshot, query, updateDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
