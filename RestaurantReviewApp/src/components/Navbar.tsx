@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Fragment } from "react/jsx-runtime";
 import { useAuth } from "../context/auth";
 import { NavLink } from "./NavLink"
@@ -13,7 +14,9 @@ interface NavbarProps {
 
 
 export const Navbar = ({ openModal, setOpenModal, setActiveSection, activeSection }: NavbarProps) => {
+  
   const { currentUser } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const confirm = useConfirm();
 
@@ -31,30 +34,91 @@ export const Navbar = ({ openModal, setOpenModal, setActiveSection, activeSectio
       }
     }
 
+  const closeMobileMenu = () => setMobileOpen(false);
+
   return (
-    <>
-      <header className="bg-slate-600 sticky top-0 z-20 mx-auto flex w-full items-center justify-between border-b border-gray-500 p-4">
-        <div className="text-2xl font-bold text-white">
+    <header className="bg-slate-600 sticky top-0 z-20 w-full border-b border-gray-500">
+      <div className="flex items-center justify-between w-full px-6 py-4">
+        
+        {/* Logo */}
+        <div className="text-2xl font-bold text-white whitespace-nowrap">
           Restaurant Reviews 🍽️
         </div>
 
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-4 text-base">
-          {currentUser !==null && currentUser.emailVerified && <Fragment>
-            <NavLink linkName="Reviews" isActive={activeSection === "reviews"} onClick={() => setActiveSection("reviews")} />
-            <NavLink linkName="Analytics" isActive={activeSection === "analytics"} onClick={() => setActiveSection("analytics")} />
+        {/* Desktop Navigation */}
+        {currentUser !== null && currentUser.emailVerified && (
+          <div className="hidden md:flex gap-8 text-base">
+            <NavLink linkName="Reviews" isActive={activeSection === "reviews"} onClick={() => setActiveSection("reviews")}/>
+            <NavLink linkName="Analytics" isActive={activeSection === "analytics"} onClick={() => setActiveSection("analytics")}/>
             <NavLink linkName="Friends" isActive={activeSection === "friends"} onClick={() => setActiveSection("friends")} />
-            <NavLink linkName="Profile" isActive={activeSection === "profile"} onClick={() => setActiveSection("profile")} />
-          </Fragment>}
-        </div>
+            <NavLink linkName="Profile" isActive={activeSection === "profile"} onClick={() => setActiveSection("profile")}/>
+          </div>
+        )}
 
-        <div className="text-base flex gap-4">
-          {currentUser === null && <Fragment>
-            <NavLink linkName="Log In" onClick={() => openModal === "login" ? setOpenModal(null) : setOpenModal("login")} />
-            <NavLink linkName="Sign Up" onClick={() => openModal === "signup" ? setOpenModal(null) : setOpenModal("signup")} />
-          </Fragment>}
-          {currentUser !== null && <NavLink linkName="Log Out" onClick={() => confirmLogout()} />}
+        {/* Right Section */}
+        <div className="flex gap-6 text-base whitespace-nowrap">
+          
+          {/* Desktop Auth Buttons */}
+          {currentUser === null && (
+            <div className="hidden md:flex gap-4">
+              <NavLink linkName="Log In" onClick={() => openModal === "login" ? setOpenModal(null) : setOpenModal("login")}/>
+              <NavLink linkName="Sign Up" onClick={() => openModal === "signup" ? setOpenModal(null) : setOpenModal("signup")}/>
+            </div>
+          )}
+
+          {currentUser !== null && (
+            <div className="hidden md:block">
+              <NavLink linkName="Log Out" onClick={confirmLogout} />
+            </div>
+          )}
+
+          {/* Mobile Menu Button */}
+          <button className="md:hidden text-white text-2xl" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+            ☰
+          </button>
         </div>
-      </header>
-    </>
+      </div>
+
+      {/* Mobile Dropdown Menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-slate-700 border-t border-gray-500 px-4 py-4 flex flex-col gap-4 text-white">
+          
+          {currentUser !== null && currentUser.emailVerified && (
+            <Fragment>
+              <NavLink linkName="Reviews" isActive={activeSection === "reviews"} onClick={() => { 
+                setActiveSection("reviews"); closeMobileMenu();
+                }}/>
+              <NavLink linkName="Analytics" isActive={activeSection === "analytics"} onClick={() => {
+                  setActiveSection("analytics");
+                  closeMobileMenu();
+                }}/>
+              <NavLink linkName="Friends" isActive={activeSection === "friends"} onClick={() => {
+                  setActiveSection("friends");
+                  closeMobileMenu();
+                }}/>
+              <NavLink linkName="Profile" isActive={activeSection === "profile"} onClick={() => {
+                  setActiveSection("profile");
+                  closeMobileMenu();
+                }}/>
+            </Fragment>
+          )}
+
+          {currentUser === null && (
+            <Fragment>
+              <NavLink linkName="Log In" onClick={() => {
+                  openModal === "login" ? setOpenModal(null) : setOpenModal("login"); closeMobileMenu();
+                }}/>
+              <NavLink linkName="Sign Up" onClick={() => {
+                  openModal === "signup" ? setOpenModal(null) : setOpenModal("signup"); closeMobileMenu();
+                }}/>
+            </Fragment>
+          )}
+
+          {currentUser !== null && (
+            <NavLink linkName="Log Out" onClick={confirmLogout} />
+          )}
+        </div>
+      )}
+    </header>
   )
 }

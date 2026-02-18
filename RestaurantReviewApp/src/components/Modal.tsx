@@ -6,9 +6,10 @@ import { auth, loginUser, registerUser, verifyUser } from "./firebase.tsx";
 interface ModalProps {
     isOpen?: boolean;
     title?: string;
+    onClose: () => void;
 }
 
-export const Modal = ({ isOpen, title }: ModalProps) => {
+export const Modal = ({ isOpen, title, onClose }: ModalProps) => {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -61,90 +62,70 @@ export const Modal = ({ isOpen, title }: ModalProps) => {
     }
   };
 
-  // Sign Up Modal
-  if (isOpen && title === "Sign Up") {
-    return (
-      <>
-        <div className={`bg-white text-black border-4 border-slate-800 rounded-lg shadow-lg w-1/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 
-          ${isOpen ? 'block' : 'hidden'}`}>
-          <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
+  if (!isOpen) return null;
 
-          {errorMsg && <p className="text-red-500 mb-4">{errorMsg}</p>}
-          <form onSubmit={onSubmit} className="flex flex-col gap-4">
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={onClose}>
+      
+      <div className="relative bg-white text-black w-full max-w-md rounded-xl shadow-2xl border border-slate-300 p-6 sm:p-8" onClick={(e) => e.stopPropagation()}>
+        
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl cursor-pointer">
+          <img src="../images/RedX.png" alt="Delete" className="w-6 h-6" />
+        </button>
+
+        <h2 className="text-xl sm:text-2xl mb-6 text-center font-semibold">
+          {title}
+        </h2>
+
+        {errorMsg && (
+          <p className="text-red-500 text-sm mb-4 text-center">
+            {errorMsg}
+          </p>
+        )}
+
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
+          
+          {/* Only for Sign Up */}
+          {title === "Sign Up" && (
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="p-2 rounded text- outline"
+              className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
               required
             />
+          )}
 
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="p-2 rounded text-black outline outline-black"
-              required
-            />
+          {/* Email */}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            required
+          />
 
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="p-2 rounded text-black outline outline-black"
-              required
-            />
+          {/* Password */}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            required
+          />
 
-            <button
-              type="submit"
-              className="bg-teal-600 hover:bg-teal-700 transition p-2 rounded"
-            >
-              Create Account
-            </button>
-          </form>
-        </div>
-      </>
-    )
-  } // Log In Modal
-  else if (isOpen && title === "Log In") {
-    return (
-      <>
-        <div className={`bg-white text-black border-4 border-slate-800 rounded-lg shadow-lg w-1/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8  
-          ${isOpen ? 'block' : 'hidden'}`}>
-          <h2 className="text-2xl mb-4 text-center underline">{title}</h2>
-
-          {errorMsg && <p className="text-red-500 mb-4">{errorMsg}</p>}
-          <form onSubmit={onSubmit} className="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="p-2 rounded text-black outline outline-black"
-              required
-            />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="p-2 rounded text-black outline outline-black"
-              required
-            />
-
-            <button
-              type="submit"
-              className="bg-teal-600 hover:bg-teal-700 transition p-2 rounded"
-            >
-              Log In
-            </button>
-          </form>
-        </div>
-      </>
-    )
-  }
+          {/* Button */}
+          <button
+            type="submit"
+            className="bg-teal-600 hover:bg-teal-700 text-white font-medium transition p-3 rounded-md"
+          >
+            {title === "Sign Up" ? "Create Account" : "Log In"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

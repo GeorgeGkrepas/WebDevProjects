@@ -42,8 +42,8 @@ function App() {
         {/* Not logged in */}
         {currentUser === null && <Fragment>
           {openModal === null && <LandingBackground />}
-          <Modal isOpen={openModal === "login"} title="Log In" />
-          <Modal isOpen={openModal === "signup"} title="Sign Up" />
+          <Modal isOpen={openModal === "login"} title="Log In" onClose={() => setOpenModal(null)} />
+          <Modal isOpen={openModal === "signup"} title="Sign Up" onClose={() => setOpenModal(null)} />
         </Fragment>}
 
         {/* Logged in but not verified */}
