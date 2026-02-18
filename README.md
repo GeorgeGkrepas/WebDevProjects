@@ -18,5 +18,5 @@ My first deployed project, it's an SPA that allows the user to make an account a
 * Responsive design
 * Authentication (Sign up, Log in, etc.)
 * Usage of a NoSQL database
-* Use of Tailwind CSS for faster design
+* Use of Tailwind CSS for faster design  
 You can check the app out [here](https://restaurantreviewapp-551c0.web.app/)
