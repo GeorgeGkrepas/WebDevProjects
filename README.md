@@ -11,3 +11,13 @@ In this project I developed an app that lets the user search for a town or city 
 * Introduction to React/Typescript
 * Introduction to Vite
 * Introduction to API integration
+
+## Restaurant Reviews App
+My first deployed project, it's an SPA that allows the user to make an account and write personal reviews from experiences in stores they ate at. It uses Firestore as the database host and for hosting
+* Full development of an SPA
+* Responsive design
+* Authentication (Sign up, Log in, etc.)
+* Usage of a NoSQL database
+* Use of Tailwind CSS for faster design
+
+🔗 App link: https://restaurantreviewapp-551c0.web.app/
